@@ -4,6 +4,7 @@ import { isNameValid, getLocations } from "../../mock-api/apis";
 import { FormDataContext } from "../../context/FormDataContext";
 
 const Form = () => {
+  // The mockup of the UI state for each form control is in the mockup.png
   const [name, setName] = useState("");
   const [isValidating, setIsValidating] = useState(false);
   const [isValidName, setIsValidName] = useState(false);
@@ -11,13 +12,16 @@ const Form = () => {
   const [stateText, setStateText] = useState("");
   const inputNameRef = useRef(null);
 
+  //location select
   const [location, setLocation] = useState("");
   const [options, setOptions] = useState([]);
   const fetchLocations = async () => {
+    // it is better to add loading state here but I ignore it for now
     const locations = await getLocations();
     setOptions(locations);
   };
 
+  // set context
   const { addFormData } = useContext(FormDataContext);
 
   useEffect(() => {
@@ -73,6 +77,8 @@ const Form = () => {
     handleResetForm();
   };
 
+  // I was thinking of using a single function to handle both inputs
+  // but maybe it would be done in the future
   const handleInputChange = (identifier, value) => {
     if (identifier === "name") {
       setName(value);
@@ -120,7 +126,7 @@ const Form = () => {
               </option>
             ))}
           </select>
-
+          {/* There should be error handling for the select, but I ignore it for now */}
           <span className="control-state-icon"></span>
           <div className="control-state">has error</div>
         </div>

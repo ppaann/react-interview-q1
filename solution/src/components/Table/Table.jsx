@@ -4,6 +4,7 @@ import { FormDataContext } from "../../context/FormDataContext";
 
 const Table = () => {
   const { formData } = useContext(FormDataContext);
+
   return (
     <table>
       <thead>
@@ -13,12 +14,16 @@ const Table = () => {
         </tr>
       </thead>
       <tbody>
-        {formData.map((data, index) => (
-          <tr key={index}>
-            <td>{data.name}</td>
-            <td>{data.location}</td>
-          </tr>
-        ))}
+        {!formData || formData.length === 0 ? (
+          <p>No data available</p>
+        ) : (
+          formData.map((data, index) => (
+            <tr key={index}>
+              <td>{data.name}</td>
+              <td>{data.location}</td>
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );
