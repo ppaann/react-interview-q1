@@ -1,15 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { isNameValid } from "../../mock-api/apis";
-//import { useDebouncedValue } from "use-debounce";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { isNameValid, getLocations } from "../../mock-api/apis";
+
+import { FormDataContext } from "../../context/FormDataContext";
 
 const Form = () => {
   const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
-  //const [useDebouncedName] = useDebouncedValue(name, 200);
   const [isValidating, setIsValidating] = useState(false);
   const [isValidName, setIsValidName] = useState(false);
   const [isError, setIsError] = useState(false);
   const [stateText, setStateText] = useState("");
+  const inputNameRef = useRef(null);
+
+  const [location, setLocation] = useState("");
+  const [options, setOptions] = useState([]);
+  const fetchLocations = async () => {
+    const locations = await getLocations();
+    setOptions(locations);
+  };
+
+  const { addFormData } = useContext(FormDataContext);
 
   useEffect(() => {
     if (name === "") {
@@ -37,9 +46,6 @@ const Form = () => {
     return () => clearTimeout(handler);
   }, [name]);
 
-  console.log(isValidName);
-  //const isLocationValid = location === "";
-
   const handleResetForm = () => {
     setName("");
     setLocation("");
@@ -51,12 +57,23 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(name, location);
+    if (!isValidName) {
+      setIsError(true);
+      setStateText(
+        name.trim() === "" ? "Must enter a name" : "The name is not valid"
+      );
+      inputNameRef.current.focus();
+      return;
+    }
+    if (location === "") {
+      alert("Please select a location"); // hard coded alert message
+      return;
+    }
+    addFormData({ name, location });
     handleResetForm();
   };
 
   const handleInputChange = (identifier, value) => {
-    console.log(identifier, value);
     if (identifier === "name") {
       setName(value);
     } else {
@@ -79,6 +96,7 @@ const Form = () => {
             type="text"
             id="name"
             name="name"
+            ref={inputNameRef}
             onChange={(e) => handleInputChange("name", e.target.value)}
             value={name}
           />
@@ -86,65 +104,22 @@ const Form = () => {
           <div className="control-state">{stateText}</div>
         </div>
       </div>
-      {/* The following code is commented out because they are for testing different UI cases */}
-      {/* <div className={`form-control isValid`}>
-        <label htmlFor="name" required>
-          Valid:
-        </label>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            id="name"
-            name="name"
-            onChange={(e) => handleInputChange("name", e.target.value)}
-            value={name}
-          />
-          <span className="control-state-icon"></span>
-          <div className="control-state"></div>
-        </div>
-      </div>
-      <div className={`form-control isValidating`}>
-        <label htmlFor="name" required>
-          Loading:
-        </label>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            id="name"
-            name="name"
-            onChange={(e) => handleInputChange("name", e.target.value)}
-            value={name}
-          />{" "}
-          <span className="control-state-icon"></span>
-          <div className="control-state">Validating...</div>
-        </div>
-      </div>
-      <div className={`form-control hasError`}>
-        <label htmlFor="name" required>
-          Error :
-        </label>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            id="name"
-            name="name"
-            onChange={(e) => handleInputChange("name", e.target.value)}
-            value={name}
-          />{" "}
-          <span className="control-state-icon"></span>
-          <div className="control-state">Validating...</div>
-        </div>
-      </div> */}
       <div className="form-control" required>
         <label htmlFor="location">Location:</label>
         <div className="input-wrapper">
-          <input
-            type="text"
-            id="location"
-            name="location"
-            onChange={(e) => handleInputChange("location", e.target.value)}
+          <select
             value={location}
-          />
+            onChange={(e) => setLocation(e.target.value)}
+            onClick={fetchLocations}
+          >
+            <option value="">Select a location</option>
+            {options.map((option, i) => (
+              // there is no id, use index as key
+              <option key={i} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
 
           <span className="control-state-icon"></span>
           <div className="control-state">has error</div>

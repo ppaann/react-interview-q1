@@ -31,8 +31,10 @@
   flex-basis: 66%;
   position: relative;
 }
-.form-control .input-wrapper input {
+.form-control .input-wrapper input,
+.form-control .input-wrapper select {
   width: 100%;
+  box-sizing: border-box;
 }
 
 .form-control.hasError .input-wrapper input {
@@ -74,13 +76,15 @@
   display: block;
 }
 
-input {
+input,
+select {
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
   outline: none;
 }
-input:focus {
+input:focus,
+select:focus {
   border-color: #007bff;
 }
 
@@ -125,8 +129,11 @@ input:focus {
   .form-control label {
     flex-basis: 100%;
   }
-  .form-control input {
-    box-sizing: border-box;
+  .form-control .input-wrapper {
+    width: 100%;
+  }
+  .form-control input,
+  .form-control select {
     width: 100%;
   }
   .form-actions {

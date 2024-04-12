@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+
+import { FormDataContext } from "../../context/FormDataContext";
 
 const Table = () => {
+  const { formData } = useContext(FormDataContext);
   return (
     <table>
       <thead>
@@ -10,14 +13,12 @@ const Table = () => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>John Doe</td>
-          <td>London</td>
-        </tr>
-        <tr>
-          <td>Jane Doe</td>
-          <td>Paris</td>
-        </tr>
+        {formData.map((data, index) => (
+          <tr key={index}>
+            <td>{data.name}</td>
+            <td>{data.location}</td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
