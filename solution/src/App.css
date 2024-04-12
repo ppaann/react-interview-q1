@@ -5,13 +5,14 @@
   justify-content: center;
   gap: 30px;
   height: 100vh;
+  overflow-y: auto;
 }
 
 .form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 20px;
+  gap: 30px;
   width: 87%;
 }
 
@@ -26,8 +27,51 @@
   text-align: right;
   flex-basis: 33%;
 }
-.form-control input {
+.form-control .input-wrapper {
   flex-basis: 66%;
+  position: relative;
+}
+.form-control .input-wrapper input {
+  width: 100%;
+}
+
+.form-control.hasError .input-wrapper input {
+  border-color: red;
+}
+.form-control.hasError .input-wrapper .control-error {
+  display: block;
+}
+
+.form-control .control-state {
+  position: absolute;
+  font-size: 0.8em;
+  display: none;
+}
+.form-control .control-state-icon {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: block;
+}
+.form-control.isValidating .control-state-icon::before {
+  content: "↺";
+}
+.form-control.hasError .control-state-icon::before {
+  content: "⚠ ";
+  color: red;
+}
+.form-control.isValid .control-state-icon::before {
+  content: "✓";
+  color: green;
+}
+.form-control.hasError .control-state {
+  color: red;
+  display: block;
+}
+.form-control.isValid .control-state {
+  color: green;
+  display: block;
 }
 
 input {
