@@ -119,12 +119,16 @@ const Form = () => {
             onClick={fetchLocations}
           >
             <option value="">Select a location</option>
-            {options.map((option, i) => (
-              // there is no id, use index as key
-              <option key={i} value={option}>
-                {option}
-              </option>
-            ))}
+            {!options ? (
+              <p>Loading</p>
+            ) : (
+              options.map((option, i) => (
+                // there is no id, use index as key
+                <option key={i} value={option}>
+                  {option}
+                </option>
+              ))
+            )}
           </select>
           {/* There should be error handling for the select, but I ignore it for now */}
           <span className="control-state-icon"></span>
