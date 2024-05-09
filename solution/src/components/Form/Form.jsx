@@ -4,6 +4,7 @@ import { isNameValid } from "../../mock-api/apis";
 // import { FormDataContext } from "../../utils/context/FormDataContext";
 import { INIT_STATE, formReducer } from "../../utils/reducer/formReducer";
 import TextInput from "../Inputs/TextInput";
+import DebouncedInput from "../Inputs/DebouncedInput";
 
 const Form = () => {
   const [state, dispatch] = useReducer(formReducer, INIT_STATE);
@@ -66,7 +67,8 @@ const Form = () => {
   return (
     <form className="form" onSubmit={handleSubmit}>
       <div>
-        <TextInput
+        <DebouncedInput
+          validateFunc={isNameValid}
           id="text_input"
           label="Name"
           type="text"
@@ -81,6 +83,21 @@ const Form = () => {
           }}
           required
         />
+        {/* <TextInput
+          id="text_input"
+          label="Name"
+          type="text"
+          name="username"
+          value={state.username}
+          handleChange={handleInputChange}
+          error={state.fieldStatus.username.error}
+          state={{
+            isValidating: state.fieldStatus.username.isValidating,
+            isValid: state.fieldStatus.username.isValid,
+            isError: state.fieldStatus.username.error,
+          }}
+          required
+        /> */}
       </div>
       <div className="form-actions">
         <button
