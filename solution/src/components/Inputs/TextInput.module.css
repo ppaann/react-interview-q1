@@ -1,0 +1,50 @@
+.formInput {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.label {
+  width: 100%;
+  text-align: left;
+}
+.inputWrapper {
+  flex-grow: 1;
+  position: relative;
+}
+.input {
+  font-size: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem 3rem 0.5rem 1rem;
+  border: 1px solid #ccc;
+}
+
+.stateIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  right: 0.75rem;
+  top: 6px;
+  position: absolute;
+}
+.isError {
+  .input {
+    border-color: red;
+    color: red;
+  }
+  .control-state {
+    color: red;
+  }
+}
+.control-state {
+  padding-top: 0.25rem;
+}
+
+@media screen and (min-width: 768px) {
+  .formInput {
+    flex-direction: row;
+  }
+  .label {
+    width: 25%;
+    text-align: right;
+  }
+}

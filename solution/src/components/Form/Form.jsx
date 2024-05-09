@@ -1,139 +1,86 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import { isNameValid, getLocations } from "../../mock-api/apis";
+import React, { useReducer } from "react";
+import { isNameValid } from "../../mock-api/apis";
 
-import { FormDataContext } from "../../context/FormDataContext";
+// import { FormDataContext } from "../../utils/context/FormDataContext";
+import { INIT_STATE, formReducer } from "../../utils/reducer/formReducer";
+import TextInput from "../Inputs/TextInput";
 
 const Form = () => {
-  // The mockup of the UI state for each form control is in the mockup.png
-  const [name, setName] = useState("");
-  const [isValidating, setIsValidating] = useState(false);
-  const [isValidName, setIsValidName] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [stateText, setStateText] = useState("");
-  const inputNameRef = useRef(null);
-
-  //location select
-  const [location, setLocation] = useState("");
-  const [options, setOptions] = useState([]);
-  const fetchLocations = async () => {
-    // it is better to add loading state here but I ignore it for now
-    const locations = await getLocations();
-    setOptions(locations);
-  };
+  const [state, dispatch] = useReducer(formReducer, INIT_STATE);
 
   // set context
-  const { addFormData } = useContext(FormDataContext);
-
-  useEffect(() => {
-    if (name === "") {
-      setIsValidating(false);
-      setIsValidName(false);
-      setIsError(false);
-      setStateText("");
-      return;
-    }
-    const checkNameValidity = async () => {
-      const isValid = await isNameValid(name);
-      setIsValidating(false);
-      setIsError(!isValid);
-      // hard coded error message
-      setStateText(isValid ? "" : "The name has already been taken.");
-      setIsValidName(isValid);
-    };
-
-    setIsValidating(true);
-    setIsValidName(false);
-    const handler = setTimeout(() => {
-      checkNameValidity();
-    }, 500); // Debounce delay
-
-    return () => clearTimeout(handler);
-  }, [name]);
+  // const { addFormData } = useContext(FormDataContext);
 
   const handleResetForm = () => {
-    setName("");
-    setLocation("");
-    setIsValidating(false);
-    setIsError(false);
-    setIsValidName(false);
-    setStateText("");
+    // setValues(initValue);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isValidName) {
-      setIsError(true);
-      setStateText(
-        name.trim() === "" ? "Must enter a name" : "The name is not valid"
-      );
-      inputNameRef.current.focus();
-      return;
-    }
-    if (location === "") {
-      alert("Please select a location"); // hard coded alert message
-      return;
-    }
-    addFormData({ name, location });
-    handleResetForm();
+    const data = new FormData(e.target);
+    console.log(data.get("name"), data.get("location"));
+  };
+  const validateUsername = (value) => {
+    isNameValid(value).then((isValid) => {
+      console.log("isValid", isValid);
+      if (isValid) {
+        dispatch({
+          type: "SET_FIELD_STATUS_VALID",
+          payload: { name: "username" },
+        });
+      } else {
+        dispatch({
+          type: "SET_FIELD_STATUS_INVALID",
+          payload: {
+            name: "username",
+            error: "The name is not valid",
+          },
+        });
+      }
+    });
   };
 
-  // I was thinking of using a single function to handle both inputs
-  // but maybe it would be done in the future
-  const handleInputChange = (identifier, value) => {
-    if (identifier === "name") {
-      setName(value);
-    } else {
-      setLocation(value);
+  // input validation may differ from input to input
+  // this may move to the input component
+  const handleValidation = (name, value) => {
+    switch (name) {
+      case "username":
+        validateUsername(value);
+        break;
+      default:
+        break;
     }
   };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    dispatch({
+      type: "VALIDATING_START",
+      payload: { name: name, value: value },
+    });
+
+    handleValidation(name, value);
+  };
+  console.log(state);
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <div
-        className={`form-control ${isError ? "hasError" : ""} ${
-          isValidating ? "isValidating" : ""
-        } ${isValidName ? "isValid" : ""}`}
-      >
-        <label htmlFor="name" required>
-          Name:
-        </label>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            id="name"
-            name="name"
-            ref={inputNameRef}
-            onChange={(e) => handleInputChange("name", e.target.value)}
-            value={name}
-          />
-          <span className="control-state-icon"></span>
-          <div className="control-state">{stateText}</div>
-        </div>
-      </div>
-      <div className="form-control" required>
-        <label htmlFor="location">Location:</label>
-        <div className="input-wrapper">
-          <select
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            onClick={fetchLocations}
-          >
-            <option value="">Select a location</option>
-            {!options ? (
-              <p>Loading</p>
-            ) : (
-              options.map((option, i) => (
-                // there is no id, use index as key
-                <option key={i} value={option}>
-                  {option}
-                </option>
-              ))
-            )}
-          </select>
-          {/* There should be error handling for the select, but I ignore it for now */}
-          <span className="control-state-icon"></span>
-          <div className="control-state">has error</div>
-        </div>
+      <div>
+        <TextInput
+          id="text_input"
+          label="Name"
+          type="text"
+          name="username"
+          value={state.username}
+          handleChange={handleInputChange}
+          error={state.fieldStatus.username.error}
+          state={{
+            isValidating: state.fieldStatus.username.isValidating,
+            isValid: state.fieldStatus.username.isValid,
+            isError: state.fieldStatus.username.error,
+          }}
+          required
+        />
       </div>
       <div className="form-actions">
         <button
