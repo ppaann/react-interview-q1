@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
 
-// import { FormDataContext } from "../../utils/context/FormDataContext";
+import { FormDataContext } from "../../utils/context/FormDataContext";
 
 const Table = () => {
-  // const { formData } = useContext(FormDataContext);
+  const { formData } = useContext(FormDataContext);
 
+  console.log(formData);
   return (
     <table>
       <thead>
@@ -13,18 +14,14 @@ const Table = () => {
           <th>Location</th>
         </tr>
       </thead>
-      {/* {!formData || formData.length === 0 ? (
-          <p>No data available</p>
-        ) : (
-          <tbody>
-          formData.map((data, index) => (
-            <tr key={index}>
-              <td>{data.name}</td>
-              <td>{data.location}</td>
-            </tr>
-          ))
-          </tbody>
-        )} */}
+
+      <tbody>
+        {formData.map((data, index) => (
+          <tr key={index}>
+            <td>{data.username}</td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 };
