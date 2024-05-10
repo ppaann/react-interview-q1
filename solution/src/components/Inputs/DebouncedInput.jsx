@@ -1,17 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import useDebounce from "../../utils/hooks/useDebounce";
 import TextInput from "./TextInput";
+import { INIT_STATE, formReducer } from "../../utils/reducer/formReducer";
 
 const DebouncedInput = ({ validateFunc, ...props }) => {
-  const [inputValue, setInputValue] = useState("");
+  // const [inputValue, setInputValue] = useState("");
+  const [state, dispatch] = useReducer(formReducer, INIT_STATE);
+  const { inputValue, isValidating, isValid, hasError, error } = state;
   const debouncedValue = useDebounce(inputValue, 300);
 
   useEffect(() => {
     if (debouncedValue) {
       console.log("debouncedValue", debouncedValue);
+      dispatch({
+        type: "VALIDATING_START",
+      });
       validateFunc(debouncedValue)
-        .then((resp) => {
-          console.log("resp", resp);
+        .then((result) => {
+          console.log("resp", result);
+          if (result) {
+            dispatch({
+              type: "SET_FIELD_STATUS_VALID",
+            });
+          } else {
+            dispatch({
+              type: "SET_FIELD_STATUS_INVALID",
+              payload: {
+                error: "Name is not valid",
+              },
+            });
+          }
         })
         .catch((error) => {
           console.log("error", error);
@@ -20,10 +38,26 @@ const DebouncedInput = ({ validateFunc, ...props }) => {
   }, [debouncedValue, validateFunc]);
 
   const onHandleChange = (e) => {
-    setInputValue(e.target.value);
+    const value = e.target.value;
+
+    if (value === "") {
+      dispatch({
+        type: "RESET",
+      });
+    } else {
+      dispatch({ type: "SET_INPUT", payload: value });
+    }
   };
   return (
-    <TextInput {...props} value={inputValue} handleChange={onHandleChange} />
+    <TextInput
+      {...props}
+      handleChange={onHandleChange}
+      value={inputValue}
+      isValidating={isValidating}
+      isValid={isValid}
+      hasError={hasError}
+      error={error}
+    />
   );
 };
 

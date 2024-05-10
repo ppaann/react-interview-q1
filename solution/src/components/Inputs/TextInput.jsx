@@ -4,31 +4,32 @@ import Loading from "../UIs/Loading";
 import Check from "../UIs/Check";
 import Error from "../UIs/Error";
 
-const TextInput = React.forwardRef(({ label, handleChange, ...props }, ref) => {
+const TextInput = React.forwardRef(({ handleChange, ...props }, ref) => {
   return (
     <div
-      className={`styles.formInput ${
-        props.state.isError ? styles.isError : ""
-      }`}
+      className={`${styles.formInput} ${props.hasError ? styles.isError : ""}`}
     >
       <label htmlFor={props.id} required className={styles.label}>
-        {label}:
+        {props.label}:
       </label>
       <div className={styles.inputWrapper}>
         <input
-          {...props}
+          id={props.id}
+          type={props.type}
+          name={props.name}
+          value={props.value}
           className={styles.input}
           onChange={handleChange}
           ref={ref}
         />
         <span className={styles.stateIcon}>
-          {props.state.isValidating && <Loading />}
-          {props.state.isValid && <Check />}
-          {props.state.isError && <Error />}
+          {props.isValidating && <Loading />}
+          {props.isValid && <Check />}
+          {props.hasError && <Error />}
         </span>
 
-        {props.error && (
-          <div className={styles["control-state"]}>{props.error}</div>
+        {props.hasError && (
+          <div className={styles.stateText}>{props.error}</div>
         )}
       </div>
     </div>

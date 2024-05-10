@@ -1,54 +1,44 @@
 const INIT_STATE = {
-  username: "",
-  fieldStatus: {
-    username: {
-      isValidating: false,
-      error: "",
-      isValid: false,
-    },
-  },
+  inputValue: "",
+  isValidating: false,
+  isValid: null,
+  hasError: null,
+  error: "",
 };
 
 const formReducer = (state, action) => {
-  console.log("action", action, "state", state);
   switch (action.type) {
+    case "SET_INPUT":
+      return {
+        ...state,
+        inputValue: action.payload,
+      };
     case "VALIDATING_START":
       return {
         ...state,
-        [action.payload.name]: action.payload.value,
-        fieldStatus: {
-          ...state.fieldStatus,
-          [action.payload.name]: {
-            isValidating: true,
-            error: "",
-            isValid: false,
-          },
-        },
+        isValidating: true,
+        error: "",
+        hasError: false,
+        isValid: null,
       };
     case "SET_FIELD_STATUS_VALID":
       return {
         ...state,
-        fieldStatus: {
-          ...state.fieldStatus,
-          [action.payload.name]: {
-            isValidating: false,
-            error: "",
-            isValid: true,
-          },
-        },
+        isValidating: false,
+        error: "",
+        isValid: true,
+        hasError: false,
       };
     case "SET_FIELD_STATUS_INVALID":
       return {
         ...state,
-        fieldStatus: {
-          ...state.fieldStatus,
-          [action.payload.name]: {
-            isValidating: false,
-            error: action.payload.error,
-            isValid: false,
-          },
-        },
+        isValidating: false,
+        error: action.payload.error,
+        isValid: false,
+        hasError: true,
       };
+    case "RESET":
+      return INIT_STATE;
     default:
       return state;
   }
