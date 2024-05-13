@@ -11,6 +11,8 @@ const formReducer = (state, action) => {
     case "SET_INPUT":
       return {
         ...state,
+        isValidating: true,
+        isValid: null,
         inputValue: action.payload,
       };
     case "VALIDATING_START":
