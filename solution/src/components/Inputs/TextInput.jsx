@@ -20,6 +20,7 @@ const TextInput = React.forwardRef(({ handleChange, ...props }, ref) => {
           value={props.value}
           className={styles.input}
           onChange={handleChange}
+          placeholder={props.placeholder}
           ref={ref}
         />
         <span className={styles.stateIcon}>

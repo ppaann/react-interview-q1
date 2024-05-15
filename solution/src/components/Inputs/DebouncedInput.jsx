@@ -15,6 +15,7 @@ const DebouncedInput = ({ validateFunc, ...props }) => {
       dispatch({
         type: "VALIDATING_START",
       });
+      // call the validate function
       validateFunc(debouncedValue)
         .then((result) => {
           console.log("resp", result);
@@ -40,7 +41,7 @@ const DebouncedInput = ({ validateFunc, ...props }) => {
   const onHandleChange = (e) => {
     const value = e.target.value;
 
-    if (value === "") {
+    if (value === "" || value.trim() === "") {
       dispatch({
         type: "RESET",
       });

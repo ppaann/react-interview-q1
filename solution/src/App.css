@@ -76,18 +76,6 @@
   display: block;
 }
 
-input,
-select {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  outline: none;
-}
-input:focus,
-select:focus {
-  border-color: #007bff;
-}
-
 .form-actions {
   display: flex;
   justify-content: flex-end;

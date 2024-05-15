@@ -3,6 +3,7 @@ import { isNameValid } from "../../mock-api/apis";
 
 import { FormDataContext } from "../../utils/context/FormDataContext";
 import DebouncedInput from "../Inputs/DebouncedInput";
+import SelectInput from "../Inputs/SelectInput";
 
 const Form = () => {
   // set context
@@ -20,16 +21,16 @@ const Form = () => {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <div>
-        <DebouncedInput
-          validateFunc={isNameValid}
-          id="text_input"
-          label="Name"
-          type="text"
-          name="username"
-          required
-        />
-      </div>
+      <DebouncedInput
+        validateFunc={isNameValid}
+        id="text_input"
+        label="Name"
+        type="text"
+        name="username"
+        placeholder="Enter your name"
+        required
+      />
+      <SelectInput id="select" label="Location:" />
       <div className="form-actions">
         <button
           type="reset"

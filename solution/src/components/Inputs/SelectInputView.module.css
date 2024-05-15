@@ -1,0 +1,29 @@
+.selectInputWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  gap: 0.5rem;
+}
+.select {
+  box-sizing: border-box;
+
+  font-size: 1rem;
+  width: 100%;
+  padding: 0.5rem 3rem 0.5rem 1rem;
+  border: 1px solid #ccc;
+}
+.label {
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .selectInputWrapper {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .label {
+    width: 25%;
+    text-align: right;
+  }
+}
