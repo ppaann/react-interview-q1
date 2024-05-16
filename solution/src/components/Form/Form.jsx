@@ -4,13 +4,15 @@ import { isNameValid } from "../../mock-api/apis";
 import { useAddFormDataContext } from "../../utils/context/FormDataContext";
 import DebouncedTextInput from "../Inputs/DebouncedTextInput";
 import SelectInput from "../Inputs/SelectInput";
+import { useRef } from "react";
 
 const Form = () => {
   // set context
   const addFormData = useAddFormDataContext();
 
+  const inputRef = useRef(null);
   const handleResetForm = () => {
-    // setValues(initValue);
+    if (inputRef.current) inputRef.current.reset();
   };
 
   const handleSubmit = (e) => {
@@ -28,13 +30,14 @@ const Form = () => {
       <DebouncedTextInput
         validateFunc={isNameValid}
         id="text_input"
-        label="Name"
+        label="Name:"
         type="text"
         name="username"
         placeholder="Enter your name"
+        ref={inputRef}
         required
       />
-      <SelectInput id="select" label="Location:" name="location" />
+      <SelectInput id="select" label="Location" name="location" />
       <div className="form-actions">
         <button
           type="reset"

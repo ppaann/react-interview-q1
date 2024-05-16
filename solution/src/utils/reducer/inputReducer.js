@@ -6,7 +6,7 @@ const INIT_STATE = {
   error: "",
 };
 
-const formReducer = (state, action) => {
+const inputReducer = (state, action) => {
   switch (action.type) {
     case "SET_INPUT":
       return {
@@ -45,4 +45,4 @@ const formReducer = (state, action) => {
       return state;
   }
 };
-export { INIT_STATE, formReducer };
+export { INIT_STATE, inputReducer };

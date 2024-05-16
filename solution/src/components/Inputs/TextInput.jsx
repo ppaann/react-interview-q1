@@ -10,7 +10,7 @@ const TextInput = React.forwardRef(({ handleChange, ...props }, ref) => {
       className={`${styles.formInput} ${props.hasError ? styles.isError : ""}`}
     >
       <label htmlFor={props.id} required className={styles.label}>
-        {props.label}:
+        {props.label}
       </label>
       <div className={styles.inputWrapper}>
         <input

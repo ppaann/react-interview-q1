@@ -1,24 +1,44 @@
-import React, { useEffect, useReducer } from "react";
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useReducer,
+  useRef,
+} from "react";
 import useDebounce from "../../utils/hooks/useDebounce";
 import TextInput from "./TextInput";
-import { INIT_STATE, formReducer } from "../../utils/reducer/formReducer";
+import { INIT_STATE, inputReducer } from "../../utils/reducer/inputReducer";
 
-const DebouncedTextInput = ({ validateFunc, ...props }) => {
-  // const [inputValue, setInputValue] = useState("");
-  const [state, dispatch] = useReducer(formReducer, INIT_STATE);
+const DebouncedTextInput = forwardRef(({ validateFunc, ...props }, ref) => {
+  const [state, dispatch] = useReducer(inputReducer, INIT_STATE);
   const { inputValue, isValidating, isValid, hasError, error } = state;
   const debouncedValue = useDebounce(inputValue, 300);
+  const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    },
+    reset: () => {
+      dispatch({
+        type: "RESET",
+      });
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+    },
+  }));
 
   useEffect(() => {
     if (debouncedValue) {
-      console.log("debouncedValue", debouncedValue);
+      // console.log("debouncedValue", debouncedValue);
       dispatch({
         type: "VALIDATING_START",
       });
       // call the validate function
       validateFunc(debouncedValue)
         .then((result) => {
-          console.log("resp", result);
+          // console.log("resp", result);
           if (result) {
             dispatch({
               type: "SET_FIELD_STATUS_VALID",
@@ -58,8 +78,9 @@ const DebouncedTextInput = ({ validateFunc, ...props }) => {
       isValid={isValid}
       hasError={hasError}
       error={error}
+      ref={inputRef}
     />
   );
-};
+});
 
 export default DebouncedTextInput;
