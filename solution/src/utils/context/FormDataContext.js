@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const FormDataContext = createContext(null);
 
@@ -16,23 +16,18 @@ export const FormDataProvider = ({ children }) => {
   );
 };
 
-// import React, { createContext, useState } from "react";
+export function useFormDataContext() {
+  const { formData } = useContext(FormDataContext);
+  if (!formData) {
+    throw new Error("useFormData must be used within a FormDataProvider");
+  }
+  return formData;
+}
 
-// // Creating the context
-// export const FormDataContext = createContext();
-
-// // Creating a provider component
-// export const FormDataProvider = ({ children }) => {
-//   const [formData, setFormData] = useState([]);
-
-//   // Function to update the form data
-//   const addFormData = (data) => {
-//     setFormData([...formData, data]);
-//   };
-
-//   return (
-//     <FormDataContext.Provider value={{ formData, addFormData }}>
-//       {children}
-//     </FormDataContext.Provider>
-//   );
-// };
+export function useAddFormDataContext() {
+  const { addFormData } = useContext(FormDataContext);
+  if (!addFormData) {
+    throw new Error("useAddFormData must be used within a FormDataProvider");
+  }
+  return addFormData;
+}

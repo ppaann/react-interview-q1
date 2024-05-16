@@ -3,7 +3,7 @@ import useDebounce from "../../utils/hooks/useDebounce";
 import TextInput from "./TextInput";
 import { INIT_STATE, formReducer } from "../../utils/reducer/formReducer";
 
-const DebouncedInput = ({ validateFunc, ...props }) => {
+const DebouncedTextInput = ({ validateFunc, ...props }) => {
   // const [inputValue, setInputValue] = useState("");
   const [state, dispatch] = useReducer(formReducer, INIT_STATE);
   const { inputValue, isValidating, isValid, hasError, error } = state;
@@ -62,4 +62,4 @@ const DebouncedInput = ({ validateFunc, ...props }) => {
   );
 };
 
-export default DebouncedInput;
+export default DebouncedTextInput;

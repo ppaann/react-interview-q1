@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import { FormDataContext } from "../../utils/context/FormDataContext";
+import { useFormDataContext } from "../../utils/context/FormDataContext";
 
 const Table = () => {
-  const { formData } = useContext(FormDataContext);
+  const formData = useFormDataContext();
 
-  console.log(formData);
   return (
     <table>
       <thead>

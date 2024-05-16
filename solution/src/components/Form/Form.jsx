@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { isNameValid } from "../../mock-api/apis";
 
-import { FormDataContext } from "../../utils/context/FormDataContext";
-import DebouncedInput from "../Inputs/DebouncedInput";
+import { useAddFormDataContext } from "../../utils/context/FormDataContext";
+import DebouncedTextInput from "../Inputs/DebouncedTextInput";
 import SelectInput from "../Inputs/SelectInput";
 
 const Form = () => {
   // set context
-  const { addFormData } = useContext(FormDataContext);
+  const addFormData = useAddFormDataContext();
 
   const handleResetForm = () => {
     // setValues(initValue);
@@ -25,7 +25,7 @@ const Form = () => {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <DebouncedInput
+      <DebouncedTextInput
         validateFunc={isNameValid}
         id="text_input"
         label="Name"
