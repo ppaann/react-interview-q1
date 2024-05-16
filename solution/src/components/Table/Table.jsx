@@ -19,6 +19,7 @@ const Table = () => {
         {formData.map((data, index) => (
           <tr key={index}>
             <td>{data.username}</td>
+            <td>{data.location}</td>
           </tr>
         ))}
       </tbody>

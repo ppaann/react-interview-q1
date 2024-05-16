@@ -1,13 +1,10 @@
-import React, { createContext, useState } from "react";
+import { createContext, useState } from "react";
 
-// Creating the context
-export const FormDataContext = createContext();
+export const FormDataContext = createContext(null);
 
-// Creating a provider component
 export const FormDataProvider = ({ children }) => {
   const [formData, setFormData] = useState([]);
 
-  // Function to update the form data
   const addFormData = (data) => {
     setFormData([...formData, data]);
   };
@@ -18,3 +15,24 @@ export const FormDataProvider = ({ children }) => {
     </FormDataContext.Provider>
   );
 };
+
+// import React, { createContext, useState } from "react";
+
+// // Creating the context
+// export const FormDataContext = createContext();
+
+// // Creating a provider component
+// export const FormDataProvider = ({ children }) => {
+//   const [formData, setFormData] = useState([]);
+
+//   // Function to update the form data
+//   const addFormData = (data) => {
+//     setFormData([...formData, data]);
+//   };
+
+//   return (
+//     <FormDataContext.Provider value={{ formData, addFormData }}>
+//       {children}
+//     </FormDataContext.Provider>
+//   );
+// };

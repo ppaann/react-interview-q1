@@ -16,7 +16,11 @@ const Form = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
-    addFormData({ username: data.get("username") });
+    console.log(`submitting form: ${data.get("username")}`);
+    addFormData({
+      username: data.get("username"),
+      location: data.get("location"),
+    });
   };
 
   return (
@@ -30,7 +34,7 @@ const Form = () => {
         placeholder="Enter your name"
         required
       />
-      <SelectInput id="select" label="Location:" />
+      <SelectInput id="select" label="Location:" name="location" />
       <div className="form-actions">
         <button
           type="reset"
