@@ -16,6 +16,17 @@
   width: 100%;
 }
 
+.isError {
+  .select {
+    border-color: red;
+    color: red;
+  }
+  .error {
+    color: red;
+    margin: 0;
+  }
+}
+
 @media screen and (min-width: 768px) {
   .selectInputWrapper {
     flex-direction: row;
